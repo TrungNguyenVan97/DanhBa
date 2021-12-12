@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">DanhBaDienThoai</string>
+    <string name="s_i_n_tho_i">Số điện thoại</string>
+    <string name="t_n">Tên</string>
+    <string name="nam">Nam</string>
+    <string name="n">Nữ</string>
+    <string name="th_m_danh_b">Thêm danh bạ</string>
+</resources>
