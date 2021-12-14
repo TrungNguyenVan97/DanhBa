@@ -4,11 +4,12 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:text="A"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="22dp"
         android:id="@+id/tvChuCai"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:gravity="center"
         android:textColor="@color/black"
         android:textSize="25sp"
         android:textStyle="bold" />

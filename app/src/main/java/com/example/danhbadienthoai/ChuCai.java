@@ -1,7 +1,7 @@
 package com.example.danhbadienthoai;
 
 public class ChuCai {
-     private String chuCai;
+    private String chuCai;
 
     public ChuCai(String chuCai) {
         this.chuCai = chuCai;
@@ -14,4 +14,5 @@ public class ChuCai {
     public void setChuCai(String chuCai) {
         this.chuCai = chuCai;
     }
+
 }

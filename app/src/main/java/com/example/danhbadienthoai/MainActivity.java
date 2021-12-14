@@ -1,55 +1,30 @@
 package com.example.danhbadienthoai;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.content.CursorLoader;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.JetPlayer;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView rvDanhBa;
-    private List<Object> listDB;
+    private List<Object> listDB, newList;
     private SoDienThoaiAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         rvDanhBa = (RecyclerView) findViewById(R.id.rvDanhBa);
 
@@ -83,13 +58,20 @@ public class MainActivity extends AppCompatActivity {
                 final int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
 
                 String name, number;
+                String header = null;
                 while (cursor.moveToNext()) {
                     name = cursor.getString(nameIndex);
                     number = cursor.getString(numberIndex);
                     number = number.replace(" ", "");
                     if (!mobileNoSet.contains(number)) {
+                        if (name != null && name.length() > 1) {
+                            String newHeader = String.valueOf(name.charAt(0));
+                            if (!newHeader.equals(header)) {
+                                header = newHeader;
+                                listDB.add(new ChuCai(newHeader));
+                            }
+                        }
                         listDB.add(new SoDienThoai(name, number));
-
                         mobileNoSet.add(number);
                     }
                 }
@@ -97,6 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 cursor.close();
             }
         }
-
     }
+
 }
