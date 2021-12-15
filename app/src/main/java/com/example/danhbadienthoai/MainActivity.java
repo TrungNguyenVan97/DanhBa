@@ -17,8 +17,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView rvDanhBa;
-    private List<Object> listDB, newList;
-    private SoDienThoaiAdapterV2 adapter;
+    private List<Object> listDB;
+    private SoDienThoaiAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         getContactList();
 
-        adapter = new SoDienThoaiAdapterV2(listDB);
+        adapter = new SoDienThoaiAdapter(listDB);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rvDanhBa.setLayoutManager(linearLayoutManager);

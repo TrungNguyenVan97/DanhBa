@@ -1,6 +1,7 @@
 package com.example.danhbadienthoai;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,12 +58,12 @@ public class SoDienThoaiAdapterV2 extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof SoDienThoaiHolder) {
+            ((SoDienThoaiHolder) holder).cbSDT.setEnabled(false);
             ((SoDienThoaiHolder) holder).onBind(mDataSet.get(position));
         } else if (holder instanceof ChuCaiHolder) {
             ((ChuCaiHolder) holder).onBind((ChuCai) mDataSet.get(position).getData());
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -89,14 +90,11 @@ public class SoDienThoaiAdapterV2 extends RecyclerView.Adapter<RecyclerView.View
         public void onBind(DataVH dataVH) {
             tvTen.setText(((SoDienThoai) dataVH.getData()).getTen());
             tvSDT.setText(((SoDienThoai) dataVH.getData()).getSdt());
-            if(isSelectMode){
-                cbSDT.setVisibility(View.VISIBLE);
-            } else {
-                cbSDT.setVisibility(View.GONE);
-            }
+
             if (dataVH.isSelected()) {
                 cbSDT.setChecked(true);
-                layoutItemSDT.setBackgroundColor(Color.argb(25, 54, 77, 100));;
+                layoutItemSDT.setBackgroundColor(Color.argb(25, 54, 77, 100));
+
             } else {
                 cbSDT.setChecked(false);
                 layoutItemSDT.setBackgroundColor(Color.TRANSPARENT);
@@ -107,9 +105,9 @@ public class SoDienThoaiAdapterV2 extends RecyclerView.Adapter<RecyclerView.View
             layoutItemSDT.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if (isSelectMode) {
+                  /*  if (isSelectMode) {
                         return false;
-                    }
+                    }*/
                     try {
                         isSelectMode = true;
                         mDataSet.get(getAdapterPosition()).setSelected(true);
