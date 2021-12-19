@@ -63,6 +63,7 @@ public class SoDienThoaiAdapterV2 extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Log.d("aaa", "onBindViewHolder");
         if (holder instanceof SoDienThoaiHolder) {
+            ((SoDienThoaiHolder) holder).cbSDT.setEnabled(false);
             ((SoDienThoaiHolder) holder).onBind(mDataSet.get(position));
         } else if (holder instanceof HeaderHolder) {
             ((HeaderHolder) holder).onBind((ChuCai) mDataSet.get(position).getData());
@@ -125,7 +126,7 @@ public class SoDienThoaiAdapterV2 extends RecyclerView.Adapter<RecyclerView.View
                     Log.d("aaa", "LongClick");
                     if (isSelectMode) {
                         return false;
-                    }
+                    }*/
                     try {
                         isSelectMode = true;
                         DataSDT dataSDT = mDataSet.get(getAdapterPosition());
