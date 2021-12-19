@@ -1,42 +1,32 @@
 package com.example.danhbadienthoai;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.preference.PreferenceActivity;
-import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collector;
 
-public class SoDienThoaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static int SDT_TYPE = 1;
     public static int HEADER_TYPE = 2;
 
-    private static List<DataSDT> mDataSet = new ArrayList();
+    public static List<DataSDT> mDataSet = new ArrayList();
     boolean isSelectMode = false;
 
-    public SoDienThoaiAdapter() {
+    private CallBack callBack = null;
+
+    public ContactAdapter() {
         Log.d("aaa", "Constructor Adapter");
     }
 
@@ -74,6 +64,12 @@ public class SoDienThoaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    @Override
+    public int getItemCount() {
+        Log.d("aaa", "getItemCount");
+        return mDataSet.size();
+    }
+
     public void reset(List<Object> listDB) {
         Log.d("aaa", "reset");
         this.mDataSet.clear();
@@ -84,10 +80,47 @@ public class SoDienThoaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
-    @Override
-    public int getItemCount() {
-        Log.d("aaa", "getItemCount");
-        return mDataSet.size();
+    public void addItem(Object data) {
+        if (data instanceof SoDienThoai) {
+            String header = String.valueOf(((SoDienThoai) data).getTen().charAt(0));
+            int positionHeader = -1;
+            for (int i = 0; i < mDataSet.size(); i++) {
+                if (mDataSet.get(i).getData() instanceof ChuCai) {
+                    ChuCai chuCai = (ChuCai) mDataSet.get(i).getData();
+                    if (chuCai.getChuCai().toUpperCase().equals(header)) {
+                        positionHeader = i;
+                        break;
+                    }
+                }
+            }
+            if (positionHeader < 0) { // chưa tồn tại header
+                // them header
+                int positionStart = mDataSet.size() - 1;
+                mDataSet.add(new DataSDT(new ChuCai(header)));
+                mDataSet.add(new DataSDT(data));
+                notifyItemRangeInserted(positionStart, 2);
+
+            } else { // đã tồn tại
+                mDataSet.add(positionHeader + 1, new DataSDT(data));
+                notifyItemInserted(positionHeader + 1);
+            }
+        }
+    }
+
+    public void setCallBack(CallBack callBack) {
+        this.callBack = callBack;
+    }
+
+    public Object getItemAt(int position) {
+        return mDataSet.get(position);
+    }
+
+    public void removeItem(Object item) {
+        int index = mDataSet.indexOf(item);
+        if (index > -1) {
+            mDataSet.remove(index);
+            notifyItemRemoved(index);
+        }
     }
 
     public class SoDienThoaiHolder extends RecyclerView.ViewHolder {
@@ -96,6 +129,7 @@ public class SoDienThoaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private TextView tvSDT;
         private LinearLayout layoutItemSDT;
         private CheckBox cbSDT;
+        private ImageView btnDelete;
 
         public SoDienThoaiHolder(@NonNull View itemView) {
             super(itemView);
@@ -104,6 +138,7 @@ public class SoDienThoaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tvSDT = itemView.findViewById(R.id.tvSDT);
             layoutItemSDT = itemView.findViewById(R.id.itemSDT);
             cbSDT = itemView.findViewById(R.id.cbSDT);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
             onClick();
         }
 
@@ -154,9 +189,23 @@ public class SoDienThoaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             DataSDT dataSDT = mDataSet.get(getAdapterPosition());
                             dataSDT.setSelected(!dataSDT.isSelected());
                             notifyItemChanged(getAdapterPosition());
+                        } else {
+                            if (callBack != null) {
+                                Log.d("128476149174", "onCLick 1231243" + getAdapterPosition());
+                                callBack.onCLick(getAdapterPosition());
+                            }
                         }
                     } catch (Exception e) {
 
+                    }
+                }
+            });
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (callBack != null) {
+                        Log.d("128476149174", "onDeleteItemCLick 1231243" + getAdapterPosition());
+                        callBack.onDeleteItemCLick(mDataSet.get(getAdapterPosition()));
                     }
                 }
             });
@@ -207,5 +256,12 @@ public class SoDienThoaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Log.d("aaa", "setSelected");
             isSelected = selected;
         }
+    }
+
+    // tạo interface để xử các sự kiện onclick hoặc 1 số sự kiện khác nếu cần thiết
+    interface CallBack {
+        void onCLick(int position);
+
+        void onDeleteItemCLick(Object item);
     }
 }

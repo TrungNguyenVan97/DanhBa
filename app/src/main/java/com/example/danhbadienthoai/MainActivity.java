@@ -1,8 +1,6 @@
 package com.example.danhbadienthoai;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.TintTypedArray;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,11 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -29,50 +24,12 @@ public class MainActivity extends Activity {
 
     private RecyclerView rvDanhBa;
     private List<Object> listDB;
-    private SoDienThoaiAdapter adapter;
+    private ContactAdapter adapter;
     private EditText edtTimKiem;
     private ImageButton btnXoa;
     private Button btnThem;
     private static final int REQUEST_CODE = 2001;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        anhXa();
-
-        getContactList();
-
-        adapter = new SoDienThoaiAdapter();
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        rvDanhBa.setLayoutManager(linearLayoutManager);
-
-        rvDanhBa.setAdapter(adapter);
-
-        adapter.reset(listDB);
-
-        actionClick();
-
-    }
-
-    private void anhXa() {
-        rvDanhBa = (RecyclerView) findViewById(R.id.rvDanhBa);
-        edtTimKiem = (EditText) findViewById(R.id.edtTimKiem);
-        btnXoa = (ImageButton) findViewById(R.id.btnXoa);
-        btnThem = (Button) findViewById(R.id.btnThem);
-    }
-
-    private void actionClick() {
-        btnThem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent intent = new Intent(MainActivity.this, AddSDTActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        });
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -86,17 +43,68 @@ public class MainActivity extends Activity {
                 // Nhận dữ liệu từ Intent trả về
                 String ten = data.getStringExtra(AddSDTActivity.EXTRA_DATA1);
                 String sdt = data.getStringExtra(AddSDTActivity.EXTRA_DATA2);
-                adapter.mDataSet.add(new SoDienThoaiAdapter.DataSDT(new SoDienThoai(ten, sdt)));
-                adapter.notifyDataSetChanged();
-
+                adapter.addItem(new SoDienThoai(ten, sdt));
             }
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        findView();
+        initView();
+        initAction();
+        initData();
+    }
+
+    private void findView() {
+        rvDanhBa = (RecyclerView) findViewById(R.id.rvDanhBa);
+        edtTimKiem = (EditText) findViewById(R.id.edtTimKiem);
+        btnXoa = (ImageButton) findViewById(R.id.btnXoa);
+        btnThem = (Button) findViewById(R.id.btnThem);
+    }
+
+    private void initView() {
+        adapter = new ContactAdapter();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        rvDanhBa.setLayoutManager(linearLayoutManager);
+        rvDanhBa.setAdapter(adapter);
+    }
+
+    private void initAction() {
+        btnThem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent = new Intent(MainActivity.this, AddSDTActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+        adapter.setCallBack(new ContactAdapter.CallBack() {
+            @Override
+            public void onCLick(int position) {
+                Log.d("128476149174", "onCLick Adapter: " + position);
+                adapter.getItemAt(position);
+                // xử lý onclick item
+                final Intent intent = new Intent(MainActivity.this, AddSDTActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+
+            @Override
+            public void onDeleteItemCLick(Object item) {
+                Log.d("128476149174", "onDeleteItemCLick Adapter: " + item.toString());
+                adapter.removeItem(item);
+            }
+        });
+    }
+
+    private void initData() {
+        getContactList();
+        adapter.reset(listDB);
+    }
+
     private void getContactList() {
-
         listDB = new ArrayList<>();
-
         String[] PROJECTION = new String[]{
                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
                 ContactsContract.Contacts.DISPLAY_NAME,
