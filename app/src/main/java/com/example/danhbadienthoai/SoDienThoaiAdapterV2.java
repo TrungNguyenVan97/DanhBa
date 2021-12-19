@@ -126,7 +126,7 @@ public class SoDienThoaiAdapterV2 extends RecyclerView.Adapter<RecyclerView.View
                     Log.d("aaa", "LongClick");
                     if (isSelectMode) {
                         return false;
-                    }*/
+                    }
                     try {
                         isSelectMode = true;
                         DataSDT dataSDT = mDataSet.get(getAdapterPosition());
