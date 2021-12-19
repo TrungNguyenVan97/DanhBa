@@ -3,6 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBa/app/src/main/res/drawable/button_them.xml" value="0.3828125" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBa/app/src/main/res/drawable/button_timkiem.xml" value="0.3828125" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBa/app/src/main/res/drawable/custom_checkbox.xml" value="0.3828125" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBa/app/src/main/res/drawable/edittext_timkiem.xml" value="0.3828125" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBa/app/src/main/res/drawable/edt_timkiem.xml" value="0.3828125" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBa/app/src/main/res/layout/activity_add_sdtactivity.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBa/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBa/app/src/main/res/layout/chucai.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBa/app/src/main/res/layout/sodienthoai.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBaDienThoai/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3828125" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBaDienThoai/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/DanhBaDienThoai/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
