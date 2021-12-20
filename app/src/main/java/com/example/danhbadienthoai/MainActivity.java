@@ -30,6 +30,15 @@ public class MainActivity extends Activity {
     private Button btnThem;
     private static final int REQUEST_CODE = 2001;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        findView();
+        initView();
+        initAction();
+        initData();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -46,16 +55,6 @@ public class MainActivity extends Activity {
                 adapter.addItem(new SoDienThoai(ten, sdt));
             }
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        findView();
-        initView();
-        initAction();
-        initData();
     }
 
     private void findView() {
@@ -80,20 +79,22 @@ public class MainActivity extends Activity {
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
+
+        btnXoa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.removeItem();
+            }
+        });
+
         adapter.setCallBack(new ContactAdapter.CallBack() {
             @Override
             public void onCLick(int position) {
-                Log.d("128476149174", "onCLick Adapter: " + position);
+                Log.d("aaa", "onCLick Adapter: " + position);
                 adapter.getItemAt(position);
                 // xử lý onclick item
                 final Intent intent = new Intent(MainActivity.this, AddSDTActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
-            }
-
-            @Override
-            public void onDeleteItemCLick(Object item) {
-                Log.d("128476149174", "onDeleteItemCLick Adapter: " + item.toString());
-                adapter.removeItem(item);
             }
         });
     }
@@ -125,7 +126,7 @@ public class MainActivity extends Activity {
                     number = number.replace(" ", "");
                     if (!mobileNoSet.contains(number)) {
                         if (name != null && name.length() > 1) {
-                            String newHeader = String.valueOf(name.charAt(0));
+                            String newHeader = String.valueOf(name.charAt(0)).toUpperCase();
                             if (!newHeader.equals(header)) {
                                 header = newHeader;
                                 listDB.add(new ChuCai(newHeader));

@@ -21,7 +21,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static int SDT_TYPE = 1;
     public static int HEADER_TYPE = 2;
 
-    public static List<DataSDT> mDataSet = new ArrayList();
+    private List<DataSDT> mDataSet = new ArrayList();
     boolean isSelectMode = false;
 
     private CallBack callBack = null;
@@ -82,20 +82,22 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void addItem(Object data) {
         if (data instanceof SoDienThoai) {
-            String header = String.valueOf(((SoDienThoai) data).getTen().charAt(0));
+            String header = String.valueOf(((SoDienThoai) data).getTen().charAt(0)).toUpperCase();
             int positionHeader = -1;
             for (int i = 0; i < mDataSet.size(); i++) {
                 if (mDataSet.get(i).getData() instanceof ChuCai) {
                     ChuCai chuCai = (ChuCai) mDataSet.get(i).getData();
-                    if (chuCai.getChuCai().toUpperCase().equals(header)) {
+                    if (chuCai.getChuCai().equals(header)) {
                         positionHeader = i;
                         break;
                     }
                 }
             }
-            if (positionHeader < 0) { // chưa tồn tại header
+
+            if (positionHeader < 0) {
+                // chưa tồn tại header
                 // them header
-                int positionStart = mDataSet.size() - 1;
+                int positionStart = mDataSet.size();
                 mDataSet.add(new DataSDT(new ChuCai(header)));
                 mDataSet.add(new DataSDT(data));
                 notifyItemRangeInserted(positionStart, 2);
@@ -115,11 +117,13 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mDataSet.get(position);
     }
 
-    public void removeItem(Object item) {
-        int index = mDataSet.indexOf(item);
-        if (index > -1) {
-            mDataSet.remove(index);
-            notifyItemRemoved(index);
+    public void removeItem() {
+        for (int i = 0; i < mDataSet.size(); i++) {
+            if (mDataSet.get(i).isSelected) {
+                String header = String.valueOf(((SoDienThoai) mDataSet.get(i).getData()).getTen().charAt(0)).toUpperCase();
+                mDataSet.remove(i);
+                notifyItemRemoved(i);
+            }
         }
     }
 
@@ -138,7 +142,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvSDT = itemView.findViewById(R.id.tvSDT);
             layoutItemSDT = itemView.findViewById(R.id.itemSDT);
             cbSDT = itemView.findViewById(R.id.cbSDT);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
             onClick();
         }
 
@@ -200,15 +203,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
             });
-            btnDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (callBack != null) {
-                        Log.d("128476149174", "onDeleteItemCLick 1231243" + getAdapterPosition());
-                        callBack.onDeleteItemCLick(mDataSet.get(getAdapterPosition()));
-                    }
-                }
-            });
         }
     }
 
@@ -260,8 +254,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     // tạo interface để xử các sự kiện onclick hoặc 1 số sự kiện khác nếu cần thiết
     interface CallBack {
-        void onCLick(int position);
 
-        void onDeleteItemCLick(Object item);
+        void onCLick(int position);
     }
 }
