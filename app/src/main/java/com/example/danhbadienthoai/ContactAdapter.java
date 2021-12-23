@@ -120,10 +120,26 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void removeItem() {
         for (int i = 0; i < mDataSet.size(); i++) {
             if (mDataSet.get(i).isSelected) {
-                String header = String.valueOf(((SoDienThoai) mDataSet.get(i).getData()).getTen().charAt(0)).toUpperCase();
-                mDataSet.remove(i);
-                notifyItemRemoved(i);
-            }
+                if (i == mDataSet.size() - 1) {
+                    if (mDataSet.get(i - 1).getData() instanceof ChuCai) {
+                        mDataSet.remove(i);
+                        mDataSet.remove(i - 1);
+                        notifyItemRangeRemoved(i - 1, 2);
+                    } else {
+                        mDataSet.remove(i);
+                        notifyItemRemoved(i);
+                    }
+                } else {
+                    if (mDataSet.get(i - 1).getData() instanceof ChuCai && mDataSet.get(i + 1).getData() instanceof ChuCai) {
+                        mDataSet.remove(i);
+                        mDataSet.remove(i - 1);
+                        notifyItemRangeRemoved(i - 1, 2);
+                    } else {
+                        mDataSet.remove(i);
+                        notifyItemRemoved(i);
+                    }
+                }
+            } continue;
         }
     }
 
@@ -194,8 +210,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             notifyItemChanged(getAdapterPosition());
                         } else {
                             if (callBack != null) {
-                                Log.d("128476149174", "onCLick 1231243" + getAdapterPosition());
-                                callBack.onCLick(getAdapterPosition());
+                                callBack.onCLickDetails(getAdapterPosition());
                             }
                         }
                     } catch (Exception e) {
@@ -255,6 +270,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // tạo interface để xử các sự kiện onclick hoặc 1 số sự kiện khác nếu cần thiết
     interface CallBack {
 
-        void onCLick(int position);
+        void onCLickDetails(int position);
     }
 }
