@@ -100,8 +100,8 @@ public class MainActivity extends Activity {
             public void onCLickDetails(int position) {
                 SoDienThoai infor = adapter.getItemAt(position);
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                intent.putExtra(EXTRA_DETAILS_NAME,infor.getTen());
-                intent.putExtra(EXTRA_DETAILS_PHONE,infor.getSdt());
+                intent.putExtra(EXTRA_DETAILS_NAME, infor.getTen());
+                intent.putExtra(EXTRA_DETAILS_PHONE, infor.getSdt());
                 startActivityForResult(intent, REQUEST_CODE_DETAILS);
             }
         });
