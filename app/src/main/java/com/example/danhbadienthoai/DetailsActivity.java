@@ -23,7 +23,7 @@ public class DetailsActivity extends Activity {
 
         findView();
         initAction();
-        receiveData();
+        setData();
 
     }
 
@@ -31,8 +31,10 @@ public class DetailsActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
     }
-    public void  receiveData(){
 
+    public void setData() {
+        tvName.setText("  " + getIntent().getStringExtra(MainActivity.EXTRA_DETAILS_NAME));
+        tvPhone.setText("  " + getIntent().getStringExtra(MainActivity.EXTRA_DETAILS_PHONE));
     }
 
     public void findView() {

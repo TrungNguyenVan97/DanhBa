@@ -31,7 +31,8 @@ public class MainActivity extends Activity {
     private Button btnThem;
     private static final int REQUEST_CODE_ADD = 2001;
     private static final int REQUEST_CODE_DETAILS = 2002;
-    public static final String EXTRA_DETAILS = "EXTRA_DETAILS";
+    public static final String EXTRA_DETAILS_NAME = "EXTRA_DETAILS_NAME";
+    public static final String EXTRA_DETAILS_PHONE = "EXTRA_DETAILS_PHONE";
     AsynctaskDetails asynctaskDetails;
 
 
@@ -97,16 +98,17 @@ public class MainActivity extends Activity {
         adapter.setCallBack(new ContactAdapter.CallBack() {
             @Override
             public void onCLickDetails(int position) {
-                adapter.getItemAt(position);
+                SoDienThoai infor = adapter.getItemAt(position);
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                startActivity(intent);
+                intent.putExtra(EXTRA_DETAILS_NAME,infor.getTen());
+                intent.putExtra(EXTRA_DETAILS_PHONE,infor.getSdt());
+                startActivityForResult(intent, REQUEST_CODE_DETAILS);
             }
-
         });
     }
 
     private void initData() {
         asynctaskDetails = new AsynctaskDetails(adapter, MainActivity.this);
-        asynctaskDetails.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        asynctaskDetails.execute();
     }
 }

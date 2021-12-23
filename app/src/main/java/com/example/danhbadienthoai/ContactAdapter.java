@@ -113,8 +113,8 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.callBack = callBack;
     }
 
-    public Object getItemAt(int position) {
-        return mDataSet.get(position);
+    public SoDienThoai getItemAt(int position) {
+        return (SoDienThoai) mDataSet.get(position).getData();
     }
 
     public void removeItem() {
