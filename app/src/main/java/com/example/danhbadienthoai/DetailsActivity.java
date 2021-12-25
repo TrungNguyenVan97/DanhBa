@@ -13,13 +13,13 @@ import android.widget.TextView;
 public class DetailsActivity extends Activity {
 
     TextView tvName, tvPhone;
-    Button btnEdit;
+    Button btnEdit, btnUpdate;
     ImageButton btnBack;
     private static final int REQUEST_CODE_EDIT = 2010;
     public static final String EXTRA_EDIT_NAME = "EXTRA_EDIT_NAME";
     public static final String EXTRA_EDIT_PHONE = "EXTRA_EDIT_PHONE";
-    public static final String EXTRA_EDIT_NAME2 = "EXTRA_EDIT_NAME2";
-    public static final String EXTRA_EDIT_PHONE2 = "EXTRA_EDIT_PHONE2";
+    public static final String EXTRA_EDIT_UPDATE_NAME = "EXTRA_EDIT_UPDATE_NAME";
+    public static final String EXTRA_EDIT_UPDATE_PHONE = "EXTRA_EDIT_UPDATE_PHONE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,6 @@ public class DetailsActivity extends Activity {
         findView();
         setData();
         initAction();
-
     }
 
     @Override
@@ -58,6 +57,7 @@ public class DetailsActivity extends Activity {
         tvPhone = (TextView) findViewById(R.id.tvPhone);
         btnEdit = (Button) findViewById(R.id.btnEdit);
         btnBack = (ImageButton) findViewById(R.id.btnBack);
+        btnUpdate = (Button) findViewById(R.id.btnUpdate);
     }
 
     private void initAction() {
@@ -76,6 +76,17 @@ public class DetailsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailsActivity.this, MainActivity.class);
+                intent.putExtra(EXTRA_EDIT_UPDATE_NAME, tvName.getText().toString().trim());
+                intent.putExtra(EXTRA_EDIT_UPDATE_PHONE, tvPhone.getText().toString().trim());
+                setResult(MainActivity.RESULT_YES, intent);
+                finish();
             }
         });
     }

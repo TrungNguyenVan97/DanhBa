@@ -2,7 +2,6 @@ package com.example.danhbadienthoai;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
@@ -11,12 +10,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class AsynctaskDetails extends AsyncTask<Integer, Void, List<Object>> {
+public class AsyncTaskListContact extends AsyncTask<Integer, Void, List<Object>> {
 
     ContactAdapter adapter;
     Activity activity;
 
-    public AsynctaskDetails(ContactAdapter adapter, Activity activity) {
+    public AsyncTaskListContact(ContactAdapter adapter, Activity activity) {
         this.adapter = adapter;
         this.activity = activity;
     }
@@ -59,7 +58,7 @@ public class AsynctaskDetails extends AsyncTask<Integer, Void, List<Object>> {
                             String newHeader = String.valueOf(name.charAt(0)).toUpperCase();
                             if (!newHeader.equals(header)) {
                                 header = newHeader;
-                                listDB.add(new ChuCai(newHeader));
+                                listDB.add(new Header(newHeader));
                             }
                         }
                         listDB.add(new SoDienThoai(name, number));

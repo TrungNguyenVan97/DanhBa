@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -60,7 +59,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((SoDienThoaiHolder) holder).onBind(mDataSet.get(position));
 
         } else if (holder instanceof HeaderHolder) {
-            ((HeaderHolder) holder).onBind((ChuCai) mDataSet.get(position).getData());
+            ((HeaderHolder) holder).onBind((Header) mDataSet.get(position).getData());
         }
     }
 
@@ -85,8 +84,8 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             String header = String.valueOf(((SoDienThoai) data).getTen().charAt(0)).toUpperCase();
             int positionHeader = -1;
             for (int i = 0; i < mDataSet.size(); i++) {
-                if (mDataSet.get(i).getData() instanceof ChuCai) {
-                    ChuCai chuCai = (ChuCai) mDataSet.get(i).getData();
+                if (mDataSet.get(i).getData() instanceof Header) {
+                    Header chuCai = (Header) mDataSet.get(i).getData();
                     if (chuCai.getChuCai().equals(header)) {
                         positionHeader = i;
                         break;
@@ -98,7 +97,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 // chưa tồn tại header
                 // them header
                 int positionStart = mDataSet.size();
-                mDataSet.add(new DataSDT(new ChuCai(header)));
+                mDataSet.add(new DataSDT(new Header(header)));
                 mDataSet.add(new DataSDT(data));
                 notifyItemRangeInserted(positionStart, 2);
 
@@ -121,7 +120,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         for (int i = 0; i < mDataSet.size(); i++) {
             if (mDataSet.get(i).isSelected) {
                 if (i == mDataSet.size() - 1) {
-                    if (mDataSet.get(i - 1).getData() instanceof ChuCai) {
+                    if (mDataSet.get(i - 1).getData() instanceof Header) {
                         mDataSet.remove(i);
                         mDataSet.remove(i - 1);
                         notifyItemRangeRemoved(i - 1, 2);
@@ -130,7 +129,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         notifyItemRemoved(i);
                     }
                 } else {
-                    if (mDataSet.get(i - 1).getData() instanceof ChuCai && mDataSet.get(i + 1).getData() instanceof ChuCai) {
+                    if (mDataSet.get(i - 1).getData() instanceof Header && mDataSet.get(i + 1).getData() instanceof Header) {
                         mDataSet.remove(i);
                         mDataSet.remove(i - 1);
                         notifyItemRangeRemoved(i - 1, 2);
@@ -139,7 +138,29 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         notifyItemRemoved(i);
                     }
                 }
-            } continue;
+            }
+        }
+    }
+
+    public void removeItemInPosition(int i) {
+        if (i == mDataSet.size() - 1) {
+            if (mDataSet.get(i - 1).getData() instanceof Header) {
+                mDataSet.remove(i);
+                mDataSet.remove(i - 1);
+                notifyItemRangeRemoved(i - 1, 2);
+            } else {
+                mDataSet.remove(i);
+                notifyItemRemoved(i);
+            }
+        } else {
+            if (mDataSet.get(i - 1).getData() instanceof Header && mDataSet.get(i + 1).getData() instanceof Header) {
+                mDataSet.remove(i);
+                mDataSet.remove(i - 1);
+                notifyItemRangeRemoved(i - 1, 2);
+            } else {
+                mDataSet.remove(i);
+                notifyItemRemoved(i);
+            }
         }
     }
 
@@ -149,7 +170,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private TextView tvSDT;
         private LinearLayout layoutItemSDT;
         private CheckBox cbSDT;
-        private ImageView btnDelete;
 
         public SoDienThoaiHolder(@NonNull View itemView) {
             super(itemView);
@@ -174,7 +194,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 cbSDT.setChecked(false);
                 layoutItemSDT.setBackgroundColor(Color.TRANSPARENT);
             }
-
         }
 
         private void onClick() {
@@ -198,6 +217,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     return true;
                 }
             });
+
             layoutItemSDT.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -231,7 +251,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvChuCai = (TextView) itemView.findViewById(R.id.tvChuCai);
         }
 
-        private void onBind(ChuCai chuCai) {
+        private void onBind(Header chuCai) {
             Log.d("aaa", "onBind HeaderHolder");
             tvChuCai.setText(chuCai.getChuCai());
         }
@@ -271,5 +291,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     interface CallBack {
 
         void onCLickDetails(int position);
+
     }
 }

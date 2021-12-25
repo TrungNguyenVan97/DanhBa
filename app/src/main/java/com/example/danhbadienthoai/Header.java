@@ -1,9 +1,9 @@
 package com.example.danhbadienthoai;
 
-public class ChuCai {
+public class Header {
     private String chuCai;
 
-    public ChuCai(String chuCai) {
+    public Header(String chuCai) {
         this.chuCai = chuCai;
     }
 

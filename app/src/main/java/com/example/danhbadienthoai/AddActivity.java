@@ -1,8 +1,5 @@
 package com.example.danhbadienthoai;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class AddSDTActivity extends Activity {
+public class AddActivity extends Activity {
 
     EditText edtTen, edtSDT;
     Button btnLuu, btnHuy;
@@ -21,7 +18,7 @@ public class AddSDTActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_sdtactivity);
+        setContentView(R.layout.activity_add);
 
         edtSDT = (EditText) findViewById(R.id.edtNhapSDT);
         edtTen = (EditText) findViewById(R.id.edtNhapten);
@@ -46,9 +43,9 @@ public class AddSDTActivity extends Activity {
                 String sdt = edtSDT.getText().toString();
 
                 if (ten.isEmpty() || sdt.isEmpty()) {
-                    Toast.makeText(AddSDTActivity.this, "Vui lòng nhập đủ thông tin", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddActivity.this, "Vui lòng nhập đủ thông tin", Toast.LENGTH_LONG).show();
                 } else {
-                    Intent data = new Intent(AddSDTActivity.this, MainActivity.class);
+                    Intent data = new Intent(AddActivity.this, MainActivity.class);
                     data.putExtra(EXTRA_DATA1, ten);
                     data.putExtra(EXTRA_DATA2, sdt);
                     setResult(Activity.RESULT_OK, data);
