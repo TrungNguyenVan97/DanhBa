@@ -17,8 +17,8 @@ import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static int SDT_TYPE = 1;
-    public static int HEADER_TYPE = 2;
+    public static final int SDT_TYPE = 1;
+    public static final int HEADER_TYPE = 2;
 
     private List<DataSDT> mDataSet = new ArrayList();
     boolean isSelectMode = false;
@@ -75,7 +75,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         for (int i = 0; i < listDB.size(); i++) {
             mDataSet.add(new DataSDT(listDB.get(i)));
         }
-
         notifyDataSetChanged();
     }
 
@@ -218,7 +217,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         private void onClick() {
-            Log.d("aaa", "onClick");
             layoutItemSDT.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -231,9 +229,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         DataSDT dataSDT = mDataSet.get(getAdapterPosition());
                         dataSDT.setSelected(true);
                         notifyItemChanged(getAdapterPosition());
-
                     } catch (Exception e) {
-
                     }
                     return true;
                 }
@@ -243,7 +239,14 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View v) {
                     Log.d("aaa", "Click");
-
+                    for (int i = 0; i < mDataSet.size(); i++) {
+                        if (mDataSet.get(i).isSelected) {
+                            isSelectMode = true;
+                            break;
+                        } else {
+                            isSelectMode = false;
+                        }
+                    }
                     try {
                         if (isSelectMode) {
                             DataSDT dataSDT = mDataSet.get(getAdapterPosition());
@@ -254,7 +257,8 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 callBack.onCLickDetails(getAdapterPosition());
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (
+                            Exception e) {
 
                     }
                 }
@@ -268,7 +272,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public HeaderHolder(@NonNull View itemView) {
             super(itemView);
-            Log.d("aaa", "Constructor HeaderHolder");
             tvChuCai = (TextView) itemView.findViewById(R.id.tvChuCai);
         }
 
@@ -288,22 +291,18 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         public Object getData() {
-            Log.d("aaa", "getData");
             return data;
         }
 
         public void setData(Object data) {
-            Log.d("aaa", "setData");
             this.data = data;
         }
 
         public boolean isSelected() {
-            Log.d("aaa", "isSelected");
             return isSelected;
         }
 
         public void setSelected(boolean selected) {
-            Log.d("aaa", "setSelected");
             isSelected = selected;
         }
     }
