@@ -22,8 +22,7 @@ public class MainActivity extends Activity {
     private static final int REQUEST_CODE_ADD = 2001;
     private static final int REQUEST_CODE_EDIT = 2010;
     public static final int RESULT_YES = 2222;
-    public static final String EXTRA_DETAILS_NAME = "EXTRA_DETAILS_NAME";
-    public static final String EXTRA_DETAILS_PHONE = "EXTRA_DETAILS_PHONE";
+    public static final String EXTRA_DETAILS = "EXTRA_DETAILS";
     AsyncTaskListContact asyncTask;
 
 
@@ -41,14 +40,20 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_ADD && resultCode == Activity.RESULT_OK) {
-            String ten = data.getStringExtra(AddActivity.EXTRA_DATA1);
-            String sdt = data.getStringExtra(AddActivity.EXTRA_DATA2);
-            adapter.addItem(new SoDienThoai(ten, sdt));
+            if (data.getExtras() != null) {
+                SoDienThoai contact = (SoDienThoai) data.getExtras().get(AddActivity.EXTRA_BUNDLE);
+                adapter.addItem(contact);
+            }
         }
         if (requestCode == REQUEST_CODE_EDIT && resultCode == MainActivity.RESULT_YES) {
-            String name = data.getStringExtra(DetailsActivity.EXTRA_EDIT_UPDATE_NAME).trim();
-            String phone = data.getStringExtra(DetailsActivity.EXTRA_EDIT_UPDATE_PHONE).trim();
-            adapter.addItem(new SoDienThoai(name, phone));
+            if (data.getExtras() != null) {
+                SoDienThoai contact = (SoDienThoai) data.getExtras().get(DetailsActivity.EXTRA_EDIT_UPDATE);
+                String id = contact.getTen().trim() + contact.getSdt().trim();
+                if (!id.equals(contact.getId())) {
+                    adapter.removeItemByID(contact.getId());
+                    adapter.addItem(new SoDienThoai(contact.getTen(), contact.getSdt(), id));
+                }
+            }
         }
     }
 
@@ -72,7 +77,7 @@ public class MainActivity extends Activity {
         btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_ADD);
             }
         });
@@ -91,8 +96,9 @@ public class MainActivity extends Activity {
             public void onCLickDetails(int position) {
                 SoDienThoai infor = adapter.getItemAt(position);
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                intent.putExtra(EXTRA_DETAILS_NAME, infor.getTen());
-                intent.putExtra(EXTRA_DETAILS_PHONE, infor.getSdt());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(EXTRA_DETAILS, infor);
+                intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
             }
         });

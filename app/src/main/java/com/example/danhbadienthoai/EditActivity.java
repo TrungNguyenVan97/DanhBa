@@ -16,8 +16,7 @@ public class EditActivity extends Activity {
     ImageButton btnEditBack;
     EditText editName, editPhone;
     Button btnEditLuu, btnEditHuy;
-    public static final String EXTRA_EDIT_NAME = "EXTRA_EDIT_NAME";
-    public static final String EXTRA_EDIT_PHONE = "EXTRA_EDIT_PHONE";
+    public static final String EXTRA_UPDATE = "EXTRA_UPDATE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +34,9 @@ public class EditActivity extends Activity {
     }
 
     private void setData() {
-        editName.setText("  " + getIntent().getStringExtra(DetailsActivity.EXTRA_EDIT_NAME));
-        editPhone.setText("  " + getIntent().getStringExtra(DetailsActivity.EXTRA_EDIT_PHONE));
+        SoDienThoai contact = (SoDienThoai) getIntent().getExtras().get(DetailsActivity.EXTRA_EDIT);
+        editName.setText(contact.getTen());
+        editPhone.setText(contact.getSdt());
     }
 
     private void findView() {
@@ -52,14 +52,17 @@ public class EditActivity extends Activity {
         btnEditLuu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoDienThoai contact = (SoDienThoai) getIntent().getExtras().get(DetailsActivity.EXTRA_EDIT);
                 String name = editName.getText().toString().trim();
                 String phone = editPhone.getText().toString().trim();
+                SoDienThoai contactEdit = new SoDienThoai(name, phone, contact.getId());
                 if (name.isEmpty() || phone.isEmpty()) {
                     Toast.makeText(EditActivity.this, "Vui lòng nhập đủ thông tin", Toast.LENGTH_LONG).show();
                 } else {
                     Intent editData = new Intent(EditActivity.this, DetailsActivity.class);
-                    editData.putExtra(EXTRA_EDIT_NAME, name);
-                    editData.putExtra(EXTRA_EDIT_PHONE, phone);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(EXTRA_UPDATE, contactEdit);
+                    editData.putExtras(bundle);
                     setResult(DetailsActivity.RESULT_OK, editData);
                     finish();
                 }

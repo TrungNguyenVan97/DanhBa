@@ -12,14 +12,13 @@ import android.widget.TextView;
 
 public class DetailsActivity extends Activity {
 
-    TextView tvName, tvPhone;
-    Button btnEdit, btnUpdate;
-    ImageButton btnBack;
+    private TextView tvName, tvPhone, tvID;
+    private Button btnEdit;
+    private ImageButton btnBack;
+    private Boolean needUpdate = false;
     private static final int REQUEST_CODE_EDIT = 2010;
-    public static final String EXTRA_EDIT_NAME = "EXTRA_EDIT_NAME";
-    public static final String EXTRA_EDIT_PHONE = "EXTRA_EDIT_PHONE";
-    public static final String EXTRA_EDIT_UPDATE_NAME = "EXTRA_EDIT_UPDATE_NAME";
-    public static final String EXTRA_EDIT_UPDATE_PHONE = "EXTRA_EDIT_UPDATE_PHONE";
+    public static final String EXTRA_EDIT = "EXTRA_EDIT";
+    public static final String EXTRA_EDIT_UPDATE = "EXTRA_EDIT_UPDATE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,29 +34,46 @@ public class DetailsActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_EDIT && resultCode == DetailsActivity.RESULT_OK) {
-            String name = data.getStringExtra(EditActivity.EXTRA_EDIT_NAME).trim();
-            String phone = data.getStringExtra(EditActivity.EXTRA_EDIT_PHONE).trim();
-            tvName.setText(name);
-            tvPhone.setText(phone);
+            if (data.getExtras() != null) {
+                SoDienThoai contact = (SoDienThoai) data.getExtras().get(EditActivity.EXTRA_UPDATE);
+                tvName.setText(contact.getTen());
+                tvPhone.setText(contact.getSdt());
+                tvID.setText(contact.getId());
+                needUpdate = true;
+            }
         }
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (needUpdate) {
+            String name = tvName.getText().toString().trim();
+            String phone = tvPhone.getText().toString().trim();
+            String id = tvID.getText().toString().trim();
+            SoDienThoai contactUpdate = new SoDienThoai(name, phone, id);
+            Intent intent = new Intent(DetailsActivity.this, MainActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(EXTRA_EDIT_UPDATE, contactUpdate);
+            intent.putExtras(bundle);
+            setResult(MainActivity.RESULT_YES, intent);
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void setData() {
-        tvName.setText("  " + getIntent().getStringExtra(MainActivity.EXTRA_DETAILS_NAME));
-        tvPhone.setText("  " + getIntent().getStringExtra(MainActivity.EXTRA_DETAILS_PHONE));
+        SoDienThoai contact = (SoDienThoai) getIntent().getExtras().get(MainActivity.EXTRA_DETAILS);
+        tvName.setText(contact.getTen());
+        tvPhone.setText(contact.getSdt());
     }
 
     private void findView() {
         tvName = (TextView) findViewById(R.id.tvName);
         tvPhone = (TextView) findViewById(R.id.tvPhone);
+        tvID = (TextView) findViewById(R.id.tvID);
         btnEdit = (Button) findViewById(R.id.btnEdit);
         btnBack = (ImageButton) findViewById(R.id.btnBack);
-        btnUpdate = (Button) findViewById(R.id.btnUpdate);
     }
 
     private void initAction() {
@@ -65,9 +81,11 @@ public class DetailsActivity extends Activity {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoDienThoai contact = (SoDienThoai) getIntent().getExtras().get(MainActivity.EXTRA_DETAILS);
                 Intent intent = new Intent(DetailsActivity.this, EditActivity.class);
-                intent.putExtra(EXTRA_EDIT_NAME, tvName.getText().toString());
-                intent.putExtra(EXTRA_EDIT_PHONE, tvPhone.getText().toString());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(EXTRA_EDIT, contact);
+                intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
             }
         });
@@ -76,17 +94,6 @@ public class DetailsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-            }
-        });
-
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DetailsActivity.this, MainActivity.class);
-                intent.putExtra(EXTRA_EDIT_UPDATE_NAME, tvName.getText().toString().trim());
-                intent.putExtra(EXTRA_EDIT_UPDATE_PHONE, tvPhone.getText().toString().trim());
-                setResult(MainActivity.RESULT_YES, intent);
-                finish();
             }
         });
     }

@@ -45,13 +45,15 @@ public class AsyncTaskListContact extends AsyncTask<Integer, Void, List<Object>>
         if (cursor != null) {
             HashSet<String> mobileNoSet = new HashSet<String>();
             try {
+                final int idIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
                 final int nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                 final int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                String name, number;
+                String name, number, id;
                 String header = null;
                 while (cursor.moveToNext()) {
                     name = cursor.getString(nameIndex);
                     number = cursor.getString(numberIndex);
+                    id = name + number;
                     number = number.replace(" ", "");
                     if (!mobileNoSet.contains(number)) {
                         if (name != null && name.length() > 1) {
@@ -61,7 +63,7 @@ public class AsyncTaskListContact extends AsyncTask<Integer, Void, List<Object>>
                                 listDB.add(new Header(newHeader));
                             }
                         }
-                        listDB.add(new SoDienThoai(name, number));
+                        listDB.add(new SoDienThoai(name, number, id));
                         mobileNoSet.add(number);
                     }
                 }

@@ -1,15 +1,17 @@
 package com.example.danhbadienthoai;
 
-public class SoDienThoai {
+import java.io.Serializable;
+
+public class SoDienThoai implements Serializable {
 
     private String ten;
     private String sdt;
+    private final String id;
 
-
-    public SoDienThoai(String ten, String sdt) {
+    public SoDienThoai(String ten, String sdt, String id) {
         this.ten = ten;
         this.sdt = sdt;
-
+        this.id = id;
     }
 
     public String getTen() {
@@ -28,6 +30,9 @@ public class SoDienThoai {
         this.sdt = sdt;
     }
 
+    public String getId() {
+        return id;
+    }
 }
 
 

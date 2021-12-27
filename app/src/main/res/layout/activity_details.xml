@@ -66,13 +66,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
-    <Button
-        android:id="@+id/btnUpdate"
-        android:layout_width="wrap_content"
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tvID"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Cập nhật"
-        android:textAllCaps="true"
+        android:layout_marginTop="30dp"
+        android:drawableLeft="@drawable/icon_sdt"
+        android:hint=" Số Điện Thoại"
+        android:inputType="number"
+        android:textColor="@color/black"
+        android:textSize="22sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPhone" />

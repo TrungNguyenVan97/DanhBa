@@ -12,8 +12,7 @@ public class AddActivity extends Activity {
 
     EditText edtTen, edtSDT;
     Button btnLuu, btnHuy;
-    public static final String EXTRA_DATA1 = "EXTRA_DATA1";
-    public static final String EXTRA_DATA2 = "EXTRA_DATA2";
+    public static final String EXTRA_BUNDLE = "EXTRA_BUNDLE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +38,18 @@ public class AddActivity extends Activity {
         btnLuu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ten = edtTen.getText().toString();
-                String sdt = edtSDT.getText().toString();
+                String name = edtTen.getText().toString().trim();
+                String number = edtSDT.getText().toString().trim();
+                String id = name+number;
+                SoDienThoai contact = new SoDienThoai(name,number,id);
 
-                if (ten.isEmpty() || sdt.isEmpty()) {
+                if (name.isEmpty() || number.isEmpty()) {
                     Toast.makeText(AddActivity.this, "Vui lòng nhập đủ thông tin", Toast.LENGTH_LONG).show();
                 } else {
                     Intent data = new Intent(AddActivity.this, MainActivity.class);
-                    data.putExtra(EXTRA_DATA1, ten);
-                    data.putExtra(EXTRA_DATA2, sdt);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(EXTRA_BUNDLE,contact);
+                    data.putExtras(bundle);
                     setResult(Activity.RESULT_OK, data);
                     finish();
                 }

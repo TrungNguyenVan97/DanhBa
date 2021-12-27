@@ -108,6 +108,39 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    public void removeItemByID(String id) {
+        for (int i = 0; i < mDataSet.size(); i++) {
+            Object contact = mDataSet.get(i).getData();
+            if (contact instanceof SoDienThoai) {
+                if (id.equals(((SoDienThoai) contact).getId().trim())) {
+                    if (i == mDataSet.size() - 1) {
+                        if (mDataSet.get(i - 1).getData() instanceof Header) {
+                            mDataSet.remove(i);
+                            mDataSet.remove(i - 1);
+                            notifyItemRangeRemoved(i - 1, 2);
+                            break;
+                        } else {
+                            mDataSet.remove(i);
+                            notifyItemRemoved(i);
+                            break;
+                        }
+                    } else {
+                        if (mDataSet.get(i - 1).getData() instanceof Header && mDataSet.get(i + 1).getData() instanceof Header) {
+                            mDataSet.remove(i);
+                            mDataSet.remove(i - 1);
+                            notifyItemRangeRemoved(i - 1, 2);
+                            break;
+                        } else {
+                            mDataSet.remove(i);
+                            notifyItemRemoved(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public void setCallBack(CallBack callBack) {
         this.callBack = callBack;
     }
@@ -117,49 +150,36 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void removeItem() {
-        for (int i = 0; i < mDataSet.size(); i++) {
+        int n = mDataSet.size();
+        for (int i = 0; i < n; i++) {
             if (mDataSet.get(i).isSelected) {
                 if (i == mDataSet.size() - 1) {
                     if (mDataSet.get(i - 1).getData() instanceof Header) {
                         mDataSet.remove(i);
                         mDataSet.remove(i - 1);
                         notifyItemRangeRemoved(i - 1, 2);
+                        n -= 2;
+                        i = 0;
                     } else {
                         mDataSet.remove(i);
                         notifyItemRemoved(i);
+                        n--;
+                        i = 0;
                     }
                 } else {
                     if (mDataSet.get(i - 1).getData() instanceof Header && mDataSet.get(i + 1).getData() instanceof Header) {
                         mDataSet.remove(i);
                         mDataSet.remove(i - 1);
                         notifyItemRangeRemoved(i - 1, 2);
+                        n -= 2;
+                        i = 0;
                     } else {
                         mDataSet.remove(i);
                         notifyItemRemoved(i);
+                        n--;
+                        i = 0;
                     }
                 }
-            }
-        }
-    }
-
-    public void removeItemInPosition(int i) {
-        if (i == mDataSet.size() - 1) {
-            if (mDataSet.get(i - 1).getData() instanceof Header) {
-                mDataSet.remove(i);
-                mDataSet.remove(i - 1);
-                notifyItemRangeRemoved(i - 1, 2);
-            } else {
-                mDataSet.remove(i);
-                notifyItemRemoved(i);
-            }
-        } else {
-            if (mDataSet.get(i - 1).getData() instanceof Header && mDataSet.get(i + 1).getData() instanceof Header) {
-                mDataSet.remove(i);
-                mDataSet.remove(i - 1);
-                notifyItemRangeRemoved(i - 1, 2);
-            } else {
-                mDataSet.remove(i);
-                notifyItemRemoved(i);
             }
         }
     }
@@ -168,6 +188,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         private TextView tvTen;
         private TextView tvSDT;
+        private TextView tvID;
         private LinearLayout layoutItemSDT;
         private CheckBox cbSDT;
 
