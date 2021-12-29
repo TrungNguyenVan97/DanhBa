@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,12 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
     public static final int SDT_TYPE = 1;
     public static final int HEADER_TYPE = 2;
 
     private List<DataSDT> mDataSet = new ArrayList();
+    private List<DataSDT> listOrigin = new ArrayList();
+
     boolean isSelectMode = false;
 
     private CallBack callBack = null;
@@ -69,11 +73,51 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mDataSet.size();
     }
 
-    public void reset(List<Object> listDB) {
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<DataSDT> list = new ArrayList();
+                String strSearch = constraint.toString();
+                if (strSearch.isEmpty()) {
+                    list.addAll(listOrigin);
+                } else {
+                    for (int i = 0; i < listOrigin.size(); i++) {
+                        if (listOrigin.get(i).getData() instanceof SoDienThoai) {
+                            SoDienThoai contact = (SoDienThoai) listOrigin.get(i).getData();
+                            if (contact.getTen().toLowerCase().contains(strSearch.toLowerCase())) {
+                                list.add(listOrigin.get(i));
+                            }
+                        }
+                    }
+                }
+                Log.d("bbb", "" + " " + strSearch + " " + list.toString());
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = list;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                reset((List<DataSDT>) results.values);
+            }
+        };
+    }
+
+    public void setData(List<Object> listDB) {
+        listOrigin.clear();
+        for (int i = 0; i < listDB.size(); i++) {
+            listOrigin.add(new DataSDT(listDB.get(i)));
+        }
+        reset(listOrigin);
+    }
+
+    public void reset(List<DataSDT> listDB) {
         Log.d("aaa", "reset");
         this.mDataSet.clear();
-        for (int i = 0; i < listDB.size(); i++) {
-            mDataSet.add(new DataSDT(listDB.get(i)));
+        if (listDB != null) {
+            mDataSet.addAll(listDB);
         }
         notifyDataSetChanged();
     }
@@ -259,7 +303,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     } catch (
                             Exception e) {
-
                     }
                 }
             });

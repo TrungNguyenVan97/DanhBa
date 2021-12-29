@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
 
+import com.example.danhbadienthoai.ContactAdapter;
+import com.example.danhbadienthoai.Header;
+import com.example.danhbadienthoai.SoDienThoai;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +33,7 @@ public class AsyncTaskListContact extends AsyncTask<Integer, Void, List<Object>>
     protected void onPostExecute(List<Object> objectList) {
         super.onPostExecute(objectList);
         if (adapter != null) {
-            adapter.reset(objectList);
+            adapter.setData(objectList);
         }
     }
 

@@ -35,8 +35,8 @@ public class EditActivity extends Activity {
 
     private void setData() {
         SoDienThoai contact = (SoDienThoai) getIntent().getExtras().get(DetailsActivity.EXTRA_EDIT);
-        editName.setText(contact.getTen());
-        editPhone.setText(contact.getSdt());
+        editName.setText("  " + contact.getTen());
+        editPhone.setText("  " + contact.getSdt());
     }
 
     private void findView() {

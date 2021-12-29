@@ -64,8 +64,8 @@ public class DetailsActivity extends Activity {
 
     private void setData() {
         SoDienThoai contact = (SoDienThoai) getIntent().getExtras().get(MainActivity.EXTRA_DETAILS);
-        tvName.setText(contact.getTen());
-        tvPhone.setText(contact.getSdt());
+        tvName.setText("  " + contact.getTen());
+        tvPhone.setText("  " + contact.getSdt());
     }
 
     private void findView() {

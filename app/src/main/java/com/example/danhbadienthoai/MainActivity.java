@@ -1,22 +1,26 @@
 package com.example.danhbadienthoai;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 
 public class MainActivity extends Activity {
 
     private RecyclerView rvDanhBa;
     private ContactAdapter adapter;
-    private EditText edtTimKiem;
+    private SearchView svTimKiem;
     private ImageButton btnXoa;
     private Button btnThem;
     private static final int REQUEST_CODE_ADD = 2001;
@@ -24,7 +28,17 @@ public class MainActivity extends Activity {
     public static final int RESULT_YES = 2222;
     public static final String EXTRA_DETAILS = "EXTRA_DETAILS";
     AsyncTaskListContact asyncTask;
+    private Handler handler = new Handler();
 
+    final Runnable r = new Runnable() {
+        public void run() {
+            try {
+                adapter.getFilter().filter(svTimKiem.getQuery());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +73,7 @@ public class MainActivity extends Activity {
 
     private void findView() {
         rvDanhBa = (RecyclerView) findViewById(R.id.rvDanhBa);
-        edtTimKiem = (EditText) findViewById(R.id.edtTimKiem);
+        svTimKiem = (SearchView) findViewById(R.id.svTimKiem);
         btnXoa = (ImageButton) findViewById(R.id.btnXoa);
         btnThem = (Button) findViewById(R.id.btnThem);
     }
@@ -100,6 +114,20 @@ public class MainActivity extends Activity {
                 bundle.putSerializable(EXTRA_DETAILS, infor);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
+            }
+        });
+        // tìm kiếm
+        svTimKiem.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                handler.removeCallbacksAndMessages(null);
+                handler.postDelayed(r,300);
+                return false;
             }
         });
     }

@@ -12,29 +12,30 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:focusableInTouchMode="true"
+        android:focusable="true"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.9"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/edtTimKiem"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="9"
+        <SearchView
+            android:iconifiedByDefault="false"
+            android:queryHint="Tìm kiếm danh bạ"
             android:background="@drawable/edt_timkiem"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
+            android:id="@+id/svTimKiem"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="9"
             android:gravity="center"
-            android:hint="Tìm kiếm danh bạ"
             android:padding="10dp"
             android:textSize="20sp" />
 
         <ImageButton
+            android:layout_marginBottom="7dp"
             android:id="@+id/btnXoa"
             android:layout_width="30dp"
-            android:layout_height="40dp"
+            android:layout_height="55dp"
             android:layout_gravity="center"
             android:layout_weight="0.5"
             android:background="@color/white"
@@ -45,7 +46,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9"
+        android:layout_weight="9.1"
         android:orientation="horizontal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
